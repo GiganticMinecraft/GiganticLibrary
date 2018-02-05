@@ -6,7 +6,7 @@ import org.bukkit.Particle
 import org.bukkit.entity.Player
 
 /**
- * Spawns the particles at [location].
+ * Spawns the particles which can be seen only by this [Player].
  *
  * @param particleType the type of particle to spawn
  * @param location the location to spawn
@@ -22,13 +22,15 @@ fun Player.spawnParticle(
         noiseData: NoiseData = NoiseData(0.0),
         speed: Double = 0.0,
         data: Any? = null
-) = spawnParticle(
-        particleType,
-        location,
-        count,
-        noiseData.noiser.invoke(noiseData.size.x),
-        noiseData.noiser.invoke(noiseData.size.y),
-        noiseData.noiser.invoke(noiseData.size.z),
-        speed,
-        data
-)
+) = (0 until count).forEach {
+    spawnParticle(
+            particleType,
+            location.noisedWith(noiseData),
+            1,
+            0.0,
+            0.0,
+            0.0,
+            speed,
+            data
+    )
+}
