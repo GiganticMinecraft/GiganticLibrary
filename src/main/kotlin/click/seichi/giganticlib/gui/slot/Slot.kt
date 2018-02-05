@@ -6,12 +6,14 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 
 /**
- * インベントリ内のスロットを抽象化したクラスです。
+ * An abstraction of a slot in an inventory.
  *
- * このクラスは`sealed`として宣言されており、サブクラスとして[ButtonSlot]と[StorageSlot]を持ちます。
- * 前者は「アイコンが固定された枠」、後者は「任意のアイテムを入れられる枠」としての意味合いを持ちます。
+ * This class is declared to be `sealed` and has [ButtonSlot] and [StorageSlot] as its subclasses.
+ * The former represents a button on which an icon is fixed,
+ * and the latter stands for a slot in which an item can be put.
  *
- * このクラスが`sealed`である理由は、この二つのサブクラスのみでインベントリGUIを構築できるとの意図によるものです。
+ * The reason this class is `sealed` follows the proposition that
+ * any inventory GUI can be built by a certain combination of these two types of slots.
  *
  * @author unicroak, kory33
  */
@@ -22,16 +24,16 @@ sealed class Slot {
 }
 
 /**
- * ボタンとして機能するスロットです。
+ * A slot that acts like a button.
  *
- * 実装するクラスは、[icon]にボタンのアイコンとして機能する[Icon]を、
- * [action]にボタンがクリックされた際の副作用を定義する必要があります。
+ * A subclass implementing this class has to define:
+ *  * [icon] as an icon of the button
+ *  * [action] as a side effect caused by the button click
  *
- * [action]は[reaction]と似ていますが、[InventoryClickEvent.isCancelled]がどう変えられようと
- * [action]実行後に強制的に[InventoryClickEvent.isCancelled]が`true`に変えられることに注意してください。
+ * [action] might look to be similar to [reaction]. However, note that [InventoryClickEvent.isCancelled] will be set to
+ * `true` no matter to what value you set this in [action].
  *
- * この仕様は、スロットが純粋にボタンとして動作するなら
- * クリックイベントはキャンセルされるべきであるという意図からのものです。
+ * This behaviour follows an idea that *if a slot acts as a pure button, the click event should be cancelled*.
  *
  * @author kory33
  */
@@ -50,29 +52,30 @@ abstract class ButtonSlot : Slot() {
 }
 
 /**
- * アイテムを内部に持つことを想定したスロットです。
+ * A slot which can hold an [ItemStack].
  *
- * これを実装するクラスは[onItemSet]をアイテムがセットされたときの反応として定義してください。
+ * A subclass implementing this class has to define [onItemSet] as a reaction for an [ItemStack] being set to the slot.
  *
- * [ItemSetReaction]はアイテムがセットされたときのイベントに対する反応を内部的に表すEnumで、
- * [onItemSet]が[ItemSetReaction.REJECT]を返すと対応する[InventoryClickEvent]がキャンセルされます。
+ * [ItemSetReaction] is an internal enumeration of the reaction for incoming [ItemStack].
+ * When [onItemSet] returns [ItemSetReaction.REJECT], the corresponding [InventoryClickEvent] will be cancelled.
+ *
+ * @author kory33
  */
 abstract class StorageSlot: Slot() {
 
     /**
-     * アイテムがセットされたときの反応です。
+     * A reaction for an [ItemStack] being set to the slot
      *
-     * @param newItemStack 新しくセットされる[ItemStack]、空になるなら`null`。
-     * @return 対応するイベントに対する反応
+     * @param newItemStack an incoming [ItemStack]. `null` if the slot is going to be empty.
+     * @param event the event which describes a transaction of [ItemStack]
+     * @return reaction to the [InventoryClickEvent]
      */
-    abstract protected fun onItemSet(newItemStack: ItemStack?): ItemSetReaction
+    abstract protected fun onItemSet(newItemStack: ItemStack?, event: InventoryClickEvent): ItemSetReaction
 
     override final val reaction = fun(event: InventoryClickEvent) {
-        val reaction = onItemSet(event.cursor)
+        val reaction = onItemSet(event.cursor, event)
 
-        if (reaction == ItemSetReaction.REJECT) {
-            event.isCancelled = true
-        }
+        event.isCancelled = reaction == ItemSetReaction.REJECT
     }
 
     protected enum class ItemSetReaction {
