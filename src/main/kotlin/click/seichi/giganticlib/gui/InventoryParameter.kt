@@ -6,7 +6,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
 /**
- * インベントリのタイプまたはサイズを保持しているクラスです。
+ * A class which is a direct sum of [InventoryType] and [Int] (representing inventory size).
  *
  * @author kory33
  */

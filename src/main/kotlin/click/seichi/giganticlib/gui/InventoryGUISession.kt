@@ -9,13 +9,15 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
 /**
- * インタラクティブなインベントリGUIのセッションを表すクラスです。
- * このクラスは`protected`な内部状態として、GUIとして機能する内部インベントリ内のボタン配置を与える[layout]を持ちます。
+ * A class representing a session of an interactive inventory GUI.
  *
- * [layout]に新しいインスタンスが代入されるたびに内部インベントリが更新され、
- * Bukkitの仕様によりこのインベントリを見ているプレーヤー全員に対してGUIの再描画が行われます。
+ * This class internally has [layout] and a session inventory as a state.
  *
- * 派生クラスは、[onInventoryOpen]と[onInventoryClose]をGUIインベントリ開閉時のアクションとして定義することができます。
+ * When a new [SlotLayout] is set on [layout], the internal inventory gets updated
+ * and the resulting difference will be broadcasted to all the players viewing this inventory.
+ *
+ * A subclass may override [onInventoryOpen] and [onInventoryClose]
+ * to define an action following inventory-open and inventory-close respectively.
  *
  * @author kory33
  */
@@ -26,13 +28,13 @@ abstract class InventoryGUISession(initialLayout: SlotLayout): InventoryHolder {
     open val inventoryParameter = InventoryParameter.Type(InventoryType.CHEST)
 
     /**
-     * インベントリのボタンのレイアウトを保持するデータです。
-     * このフィールドに新しいインスタンスが代入されるたびにインベントリGUIの更新が行われます。
+     * A layout representing the arrangement of slots.
+     * Any new value set to this field will cause inventory re-renders.
      *
-     * 既存のレイアウトの[SlotLayout.isSafeToApply]が`false`を返す場合、
-     * ([ButtonSlot]が[StorageSlot]を上書きする危険性があるため)代入時にエラーが投げられます。
+     * When the old layout says `false` on [SlotLayout.isSafeToApply],
+     * an exception is thrown as it indicates that [ButtonSlot] may overwrite [StorageSlot].
      */
-    private var layout: SlotLayout = initialLayout
+    protected var layout: SlotLayout = initialLayout
         set(newLayout) {
             if (!field.isSafeToApply(newLayout)) {
                 throw IllegalStateException("Given layout is not safe to apply.")
@@ -46,21 +48,21 @@ abstract class InventoryGUISession(initialLayout: SlotLayout): InventoryHolder {
     }
 
     /**
-     * スロット番号から、関連付けられた反応を取得します。
-     * @param slotId Menu内のslot番号
-     * @return 指定IDのスロットに関連付けられた反応を取得します。
+     * Returns a reaction bound to a slot of specified [slotId]
+     * @param slotId index of the slot
+     * @return reaction bound to the slot
      */
     fun getBoundReaction(slotId: Int) = layout[slotId].reaction
 
     /**
-     * メニューのインベントリが開かれたときのアクションを実行します
+     * Executes an action on inventory-open.
      */
-    abstract fun onInventoryOpen(event: InventoryOpenEvent)
+    open fun onInventoryOpen(event: InventoryOpenEvent) {}
 
     /**
-     * メニューのインベントリが閉じられたときのアクションを実行します
+     * Executes an action on inventory-close.
      */
-    abstract fun onInventoryClose(event: InventoryCloseEvent)
+    open fun onInventoryClose(event: InventoryCloseEvent) {}
 
     override fun getInventory() = sessionInventory
 
