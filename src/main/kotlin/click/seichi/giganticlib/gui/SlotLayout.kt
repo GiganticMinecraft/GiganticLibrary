@@ -8,21 +8,19 @@ import click.seichi.giganticlib.util.collection.mapValuesNotNull
 import org.bukkit.inventory.Inventory
 
 /**
- * スロットのレイアウトを決定するクラスです。
+ * A class that determines the positioning of slots.
  *
- * このクラスは、[inventoryParameter]が指定するインベントリ内の**全ての**スロットに対して
- * [Slot]を割り当てることを約束します。
+ * This class promises to allocate a [Slot] instance to *all* the slots in the inventory
+ * whose size is determined by [inventoryParameter].
  *
- * [defaultSlot]は既定値としての[Slot]インスタンスを与えます。
- *
- * @param inventoryParameter インベントリのサイズを示すデータ値
- * @param slotOverrides [defaultSlot]を上書きする対象のスロットIDからスロットへの[Map]
+ * @param inventoryParameter a data value which specifies the inventory size
+ * @param slotOverrides a map containing entries, each representing a slot override.
  */
 abstract class SlotLayout(private val inventoryParameter: InventoryParameter, slotOverrides: Map<Int, Slot> = HashMap()) {
     /**
-     * 何もセットされていない枠を埋めるためのデフォルトのスロット
+     * A default [Slot] instance which is used in filling up the non-overriden slots.
      *
-     * Minecraftデフォルトのスロットのような挙動をさせる場合は[NormalSlot]を使用してください。
+     * If you want a slot which acts like a one in a vanilla chest, use [NormalSlot].
      */
     abstract val defaultSlot: Slot
 
@@ -30,15 +28,15 @@ abstract class SlotLayout(private val inventoryParameter: InventoryParameter, sl
         slotId to (slotOverrides[slotId] ?: defaultSlot)
     }
 
-    /** ストレージであるスロットのインデックスの集合 */
+    /** Indices of slots that act as a storage */
     private val storageIndices = slotMapping.filterValues { when(it) {
-        // Slotのサブクラスが追加された際にコンパイルを落とすためにわざと明示的に書いています
+        // This clause is explicitly written to fail the compile when another [Slot] subclass is added.
         is StorageSlot -> true
         is ButtonSlot -> false
     } }.keys
 
     /**
-     * ボタンのインデックスとそれに対応するスロットの組
+     * Set of mappings from a button index to a [Slot] instance
      */
     private val buttons = slotMapping.mapValuesNotNull { _, slot -> slot as? ButtonSlot }
 
@@ -46,29 +44,27 @@ abstract class SlotLayout(private val inventoryParameter: InventoryParameter, sl
             buttons.forEach { index, button -> inventory.setItem(index, button.icon.itemStack) }
 
     /**
-     * 他のレイアウトをGUIインターフェースに安全に適用することができるかを指します。
+     * Judges if another [SlotLayout] can safely substitute the layout described by this object.
      *
-     * 「安全に適用できる」とは、対象のレイアウトとこのレイアウトが同じだけのスロット数を持ち、
-     * 任意のインデックス `i` に対して
+     * Here, "safely substitute" means that the target layout has the same amount of slots as this layout has,
+     * and that the following predicate is satisfied:
      *
-     * `this[i] is StorageSlot (if and only if) another[i] is StorageSlot`
+     * ```this[i] is StorageSlot (if and only if) another[i] is StorageSlot```
      *
-     * が成り立つことを言います。
-     *
-     * [Slot]は[ButtonSlot]または[StorageSlot]であることが保証されるので、
-     * 後半の条件は[storageIndices]の同値性を調べるのみで済みます。
+     * A [Slot] is guaranteed to be either a [ButtonSlot] or a [StorageSlot].
+     * hence the predicate is equivalent to [storageIndices] being equal.
      */
     fun isSafeToApply(another: SlotLayout) =
             (this.inventoryParameter.toSize() == another.inventoryParameter.toSize()) &&
             (this.storageIndices == another.storageIndices)
 
     /**
-     * 対象スロットIDに存在する[Slot]を取得します。
+     * Returns a [Slot] which is set to the given index.
      *
-     * [slotId]が[inventoryParameter]で規定されたインベントリのサイズ外である場合は
-     * [IndexOutOfBoundsException]が`throw`されます。
+     * If [slotId] exceeds the boundary described by [inventoryParameter],
+     * [IndexOutOfBoundsException] will be thrown.
      *
-     * @param slotId 取得する対象のスロットID
+     * @param slotId target slot id
      */
     operator fun get(slotId: Int) = slotMapping[slotId] ?:
             throw IndexOutOfBoundsException("Target slot number is out of range!")

@@ -9,6 +9,11 @@ import org.bukkit.event.inventory.InventoryEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 
 /**
+ * A default implementation of a listener which conveys events to the [InventoryGUISession].
+ *
+ * Note that this class is most likely to cause a conflict between multiple plugins
+ * when used without the package relocation.
+ *
  * @author unicroak, kory33
  */
 class InventoryGUIListener : Listener {
