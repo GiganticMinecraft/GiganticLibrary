@@ -30,7 +30,7 @@ abstract class SlotLayout(private val inventoryParameter: InventoryParameter, sl
 
     /** Indices of slots that act as a storage */
     private val storageIndices = slotMapping.filterValues { when(it) {
-        // This clause is explicitly written to fail the compile when another [Slot] subclass is added.
+        // This clause is explicitly written to reject the compilation when another subclass is defined for [Slot].
         is StorageSlot -> true
         is ButtonSlot -> false
     } }.keys
