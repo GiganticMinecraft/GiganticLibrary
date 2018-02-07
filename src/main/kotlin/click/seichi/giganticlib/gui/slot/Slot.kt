@@ -9,11 +9,11 @@ import org.bukkit.inventory.ItemStack
  * An abstraction of a slot in an inventory.
  *
  * This class is declared to be `sealed` and has [ButtonSlot] and [StorageSlot] as its subclasses.
- * The former represents a button on which an icon is fixed,
- * and the latter stands for a slot in which an item can be put.
+ * The former represents a button on which an icon is fixed whereas
+ * the latter stands for a slot into which an item can be put.
  *
- * The reason this class is `sealed` follows the proposition that
- * any inventory GUI can be built by a certain combination of these two types of slots.
+ * The reason this class is `sealed` follows an idea that any inventory GUI can be built
+ * by a certain combination of these two types of slots.
  *
  * @author unicroak, kory33
  */

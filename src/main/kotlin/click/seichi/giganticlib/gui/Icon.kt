@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
 /**
- * A class that acts as a facade to an [ItemStack].
+ * A class that acts as an immutable facade to an [ItemStack].
  * @author unicroak
  */
 data class Icon(

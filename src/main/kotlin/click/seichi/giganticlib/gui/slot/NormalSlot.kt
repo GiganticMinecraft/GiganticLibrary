@@ -5,7 +5,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 
 /**
- * Represents a "normal" slot in a vanilla chest inventory.
+ * Represents a "normal" slot in a vanilla-chest inventory.
  *
  * This slot accepts every in and out transaction of [ItemStack].
  *

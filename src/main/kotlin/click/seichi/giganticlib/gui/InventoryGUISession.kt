@@ -9,9 +9,9 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
 /**
- * A class representing a session of an interactive inventory GUI.
+ * A class that represents a session of an interactive inventory GUI.
  *
- * This class internally has [layout] and a session inventory as a state.
+ * This class internally has a [layout] and a session inventory as a state.
  *
  * When a new [SlotLayout] is set on [layout], the internal inventory gets updated
  * and the resulting difference will be broadcasted to all the players viewing this inventory.
@@ -28,11 +28,11 @@ abstract class InventoryGUISession(initialLayout: SlotLayout): InventoryHolder {
     open val inventoryParameter = InventoryParameter.Type(InventoryType.CHEST)
 
     /**
-     * A layout representing the arrangement of slots.
-     * Any new value set to this field will cause inventory re-renders.
+     * A layout that represents the arrangement of slots.
+     * Any new value set to this field will make inventory re-render itself.
      *
      * When the old layout says `false` on [SlotLayout.isSafeToApply],
-     * an exception is thrown as it indicates that [ButtonSlot] may overwrite [StorageSlot].
+     * an exception is thrown as it indicates that [ButtonSlot] may overwrite some [StorageSlot].
      */
     protected var layout: SlotLayout = initialLayout
         set(newLayout) {
