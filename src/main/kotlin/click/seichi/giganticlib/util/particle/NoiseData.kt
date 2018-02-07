@@ -3,15 +3,17 @@ package click.seichi.giganticlib.util.particle
 import org.bukkit.util.Vector
 
 /**
- * A class that represents data of noise on the XYZ axis.
+ * A class that acts as an immutable data of noise on the XYZ axis.
  *
- * @param size the size of noise
+ * @property size the size of noise
+ *
+ * @param innerSize the size of noise (only to set)
  * @param noiser the maker of noise
  *
  * @author unicroak
  */
 data class NoiseData(
-        val size: Vector,
+        private val innerSize: Vector,
         val noiser: (Double) -> Double = defaultNoiser
 ) {
 
@@ -29,5 +31,8 @@ data class NoiseData(
             sizeUniformly: Double,
             noiser: (Double) -> Double = defaultNoiser
     ) : this(Vector(sizeUniformly, sizeUniformly, sizeUniformly), noiser)
+
+    val size
+        get() = innerSize.clone()
 
 }
