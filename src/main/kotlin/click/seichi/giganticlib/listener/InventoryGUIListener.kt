@@ -12,7 +12,8 @@ import org.bukkit.event.inventory.InventoryOpenEvent
 /**
  * A default implementation of a listener which conveys events to the [InventoryGUISession].
  *
- * Do check for return value of [isInstanceAlreadyListening] because the listener cannot be registered twice.
+ * Do check for return value of [isInstanceAlreadyListening]
+ * before registering the listener because it cannot be registered twice.
  *
  * @author unicroak, kory33
  */
