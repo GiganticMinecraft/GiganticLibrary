@@ -1,6 +1,6 @@
 package click.seichi.giganticlib.listener
 
-import click.seichi.giganticlib.gui.InventoryGUISession
+import click.seichi.giganticlib.gui.session.InventoryGUISession
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent

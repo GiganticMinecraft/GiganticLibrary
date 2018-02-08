@@ -1,5 +1,7 @@
-package click.seichi.giganticlib.gui
+package click.seichi.giganticlib.gui.session
 
+import click.seichi.giganticlib.gui.InventoryParameter
+import click.seichi.giganticlib.gui.SlotLayout
 import click.seichi.giganticlib.gui.slot.ButtonSlot
 import click.seichi.giganticlib.gui.slot.StorageSlot
 import org.bukkit.event.inventory.InventoryCloseEvent
