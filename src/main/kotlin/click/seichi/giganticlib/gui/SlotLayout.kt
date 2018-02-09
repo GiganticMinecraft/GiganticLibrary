@@ -14,15 +14,19 @@ import org.bukkit.inventory.Inventory
  * whose size is determined by [inventoryParameter].
  *
  * @param inventoryParameter a data value which specifies the inventory size
- * @param slotOverrides a map containing entries, each representing a slot override.
  */
-abstract class SlotLayout(val inventoryParameter: InventoryParameter, slotOverrides: Map<Int, Slot> = HashMap()) {
+abstract class SlotLayout(val inventoryParameter: InventoryParameter) {
     /**
      * A default [Slot] instance which is used in filling up the non-overriden slots.
      *
      * If you want a slot which acts like a one in a vanilla chest, use [NormalSlot].
      */
     abstract val defaultSlot: Slot
+
+    /**
+     * A map containing entries, each representing a slot override.
+     */
+    abstract val slotOverrides: Map<Int, Slot>
 
     private val slotMapping: Map<Int, Slot> = (0 until inventoryParameter.toSize()).associate { slotId ->
         slotId to (slotOverrides[slotId] ?: defaultSlot)
