@@ -16,7 +16,7 @@ import org.bukkit.inventory.Inventory
  * @param inventoryParameter a data value which specifies the inventory size
  * @param slotOverrides a map containing entries, each representing a slot override.
  */
-abstract class SlotLayout(private val inventoryParameter: InventoryParameter, slotOverrides: Map<Int, Slot> = HashMap()) {
+abstract class SlotLayout(val inventoryParameter: InventoryParameter, slotOverrides: Map<Int, Slot> = HashMap()) {
     /**
      * A default [Slot] instance which is used in filling up the non-overriden slots.
      *

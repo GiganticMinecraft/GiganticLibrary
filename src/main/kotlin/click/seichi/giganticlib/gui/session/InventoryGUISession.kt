@@ -1,12 +1,10 @@
 package click.seichi.giganticlib.gui.session
 
-import click.seichi.giganticlib.gui.InventoryParameter
 import click.seichi.giganticlib.gui.SlotLayout
 import click.seichi.giganticlib.gui.slot.ButtonSlot
 import click.seichi.giganticlib.gui.slot.StorageSlot
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
-import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 
@@ -27,8 +25,6 @@ abstract class InventoryGUISession(initialLayout: SlotLayout): InventoryHolder {
 
     abstract val title: String
 
-    open val inventoryParameter = InventoryParameter.Type(InventoryType.CHEST)
-
     /**
      * A layout that represents the arrangement of slots.
      * Any new value set to this field will make inventory re-render itself.
@@ -46,7 +42,7 @@ abstract class InventoryGUISession(initialLayout: SlotLayout): InventoryHolder {
         }
 
     private val sessionInventory: Inventory by lazy {
-        inventoryParameter.createInventoryWith(this, title)
+        layout.inventoryParameter.createInventoryWith(this, title)
     }
 
     /**
