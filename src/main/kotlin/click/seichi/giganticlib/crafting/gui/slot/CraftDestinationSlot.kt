@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack
  *
  * @author kory33
  */
-class CraftDestinationSlot : StorageSlot() {
+object CraftDestinationSlot : StorageSlot() {
 
     override fun onItemSet(newItemStack: ItemStack?, event: InventoryClickEvent): ItemSetReaction {
         if (event.currentItem.type == Material.AIR) return ItemSetReaction.REJECT

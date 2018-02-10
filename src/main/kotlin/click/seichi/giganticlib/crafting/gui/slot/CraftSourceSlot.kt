@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack
  *
  * @author kory33
  */
-class CraftSourceSlot : StorageSlot() {
+object CraftSourceSlot : StorageSlot() {
 
     override fun onItemSet(newItemStack: ItemStack?, event: InventoryClickEvent) = ItemSetReaction.ACCEPT.also {
         val session = event.inventory.holder as? CraftSession ?: return@also
