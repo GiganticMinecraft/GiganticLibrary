@@ -44,7 +44,7 @@ class NBTItemStack(itemStack: ItemStack) {
     /**
      * Returns the value to which the given [key] corresponds
      */
-    inline fun <reified T> read(key: String) = read<T>(key, T::class.java.simpleName)
+    inline fun <reified T> read(key: String): T = read<T>(key, T::class.java.simpleName)
 
     @Suppress("UNCHECKED_CAST")
     fun <T> read(key: String, typeName: String) = ("get$typeName").let { methodName ->
