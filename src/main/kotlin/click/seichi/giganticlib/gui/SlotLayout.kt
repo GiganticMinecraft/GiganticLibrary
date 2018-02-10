@@ -15,7 +15,7 @@ import org.bukkit.inventory.Inventory
  *
  * @param inventoryParameter a data value which specifies the inventory size
  */
-abstract class SlotLayout(val inventoryParameter: InventoryParameter) {
+abstract class SlotLayout(val inventoryParameter: InventoryParameter): Iterable<Map.Entry<Int, Slot>> {
     /**
      * A default [Slot] instance which is used in filling up the non-overriden slots.
      *
@@ -28,7 +28,7 @@ abstract class SlotLayout(val inventoryParameter: InventoryParameter) {
      */
     abstract val slotOverrides: Map<Int, Slot>
 
-    val slotMapping: Map<Int, Slot> = (0 until inventoryParameter.toSize()).associate { slotId ->
+    private val slotMapping: Map<Int, Slot> = (0 until inventoryParameter.toSize()).associate { slotId ->
         slotId to (slotOverrides[slotId] ?: defaultSlot)
     }
 
@@ -73,4 +73,5 @@ abstract class SlotLayout(val inventoryParameter: InventoryParameter) {
     operator fun get(slotId: Int) = slotMapping[slotId] ?:
             throw IndexOutOfBoundsException("Target slot number is out of range!")
 
+    override fun iterator() = slotMapping.iterator()
 }
