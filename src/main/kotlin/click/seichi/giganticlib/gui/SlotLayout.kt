@@ -28,7 +28,7 @@ abstract class SlotLayout(val inventoryParameter: InventoryParameter) {
      */
     abstract val slotOverrides: Map<Int, Slot>
 
-    private val slotMapping: Map<Int, Slot> = (0 until inventoryParameter.toSize()).associate { slotId ->
+    val slotMapping: Map<Int, Slot> = (0 until inventoryParameter.toSize()).associate { slotId ->
         slotId to (slotOverrides[slotId] ?: defaultSlot)
     }
 
