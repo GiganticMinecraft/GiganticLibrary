@@ -6,7 +6,7 @@
 
     <groupId>click.seichi</groupId>
     <artifactId>gigantic-library</artifactId>
-    <version>0.1.0-alpha.10</version>
+    <version>0.1.0-alpha.11</version>
 
     <properties>
         <kotlin.version>1.2.21</kotlin.version>
