@@ -28,7 +28,7 @@ abstract class PlayerGUISession(private val player: Player,
         inventory.filterIndexed { index, _ -> layout[index] is StorageSlot }
                 .mapNotNull { itemStack ->
                     // addItem(itemStack)[0] will return overflown itemStack or null
-                    player.inventory.addItem(itemStack)[0]
+                    itemStack?.let { player.inventory.addItem(it)[0] }
                 }.forEach { overflownItemStack ->
             player.world.dropItemNaturally(player.location, overflownItemStack)
         }
