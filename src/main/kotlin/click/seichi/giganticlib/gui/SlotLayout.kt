@@ -1,7 +1,6 @@
 package click.seichi.giganticlib.gui
 
 import click.seichi.giganticlib.gui.slot.ButtonSlot
-import click.seichi.giganticlib.gui.slot.NormalSlot
 import click.seichi.giganticlib.gui.slot.Slot
 import click.seichi.giganticlib.gui.slot.StorageSlot
 import click.seichi.giganticlib.util.collection.mapValuesNotNull
@@ -15,18 +14,9 @@ import org.bukkit.inventory.Inventory
  *
  * @param inventoryParameter a data value which specifies the inventory size
  */
-abstract class SlotLayout(val inventoryParameter: InventoryParameter): Iterable<Map.Entry<Int, Slot>> {
-    /**
-     * A default [Slot] instance which is used in filling up the non-overriden slots.
-     *
-     * If you want a slot which acts like a one in a vanilla chest, use [NormalSlot].
-     */
-    abstract val defaultSlot: Slot
-
-    /**
-     * A map containing entries, each representing a slot override.
-     */
-    abstract val slotOverrides: Map<Int, Slot>
+class SlotLayout(val inventoryParameter: InventoryParameter,
+                 val defaultSlot: Slot,
+                 val slotOverrides: Map<Int, Slot>): Iterable<Map.Entry<Int, Slot>> {
 
     private val slotMapping: Map<Int, Slot> = (0 until inventoryParameter.toSize()).associate { slotId ->
         slotId to (slotOverrides[slotId] ?: defaultSlot)
