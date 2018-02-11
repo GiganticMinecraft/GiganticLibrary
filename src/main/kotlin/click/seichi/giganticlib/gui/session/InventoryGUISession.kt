@@ -42,7 +42,9 @@ abstract class InventoryGUISession(initialLayout: SlotLayout): InventoryHolder {
         }
 
     private val sessionInventory: Inventory by lazy {
-        layout.inventoryParameter.createInventoryWith(this, title)
+        layout.inventoryParameter.createInventoryWith(this, title).also {
+            layout.applyTo(it)
+        }
     }
 
     /**
