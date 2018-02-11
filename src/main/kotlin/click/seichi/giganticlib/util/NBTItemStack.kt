@@ -15,24 +15,25 @@ import kotlin.reflect.jvm.javaMethod
  */
 class NBTItemStack(itemStack: ItemStack) {
 
-    var itemStack = itemStack
+    private var itemStack = itemStack
         get() = field.clone()
-    /* private set */
 
-    /* private */ val nmsItemStack: Any
+    private val nmsItemStack: Any
         get() = CRAFT_ITEM_STACK.getMethod("asNMSCopy", ItemStack::class.java).invoke(CRAFT_ITEM_STACK, itemStack)
 
-    /* private */ val nbtTag: Any
+    private val nbtTag: Any
         get() = nmsItemStack.javaClass.getMethod("getTag").invoke(nmsItemStack) ?: NBT_TAG_COMPOUND.newInstance()
 
     companion object {
         private val VERSION = Bukkit.getServer().javaClass.`package`.name.replace(".", ",").split(",".toRegex()).toTypedArray()[3]
 
-        val CRAFT_ITEM_STACK: Class<*> = Class.forName("org.bukkit.craftbukkit.$VERSION.inventory.CraftItemStack")
-        val NBT_TAG_COMPOUND: Class<*> = Class.forName("net.minecraft.server.$VERSION.NBTTagCompound")
+        private val CRAFT_ITEM_STACK: Class<*> = Class.forName("org.bukkit.craftbukkit.$VERSION.inventory.CraftItemStack")
+        private val NBT_TAG_COMPOUND: Class<*> = Class.forName("net.minecraft.server.$VERSION.NBTTagCompound")
 
         private val methodCacheMap = mutableMapOf<String, Method>()
     }
+
+    private fun findMethodFromCache(methodName: String, method: Method): Method = methodCacheMap.getOrPut(methodName, { method })
 
     /**
      * Checks if this [NBTItemStack] contains NBT value which is corresponds the given [key].
@@ -44,7 +45,7 @@ class NBTItemStack(itemStack: ItemStack) {
     /**
      * Returns the value to which the given [key] corresponds
      */
-    inline fun <reified T> read(key: String): T = read<T>(key, T::class.java.simpleName)
+    inline fun <reified T> read(key: String): T = read(key, T::class.java.simpleName)
 
     @Suppress("UNCHECKED_CAST")
     fun <T> read(key: String, typeName: String) = ("get$typeName").let { methodName ->
@@ -56,11 +57,11 @@ class NBTItemStack(itemStack: ItemStack) {
      *
      * @return itself
      */
-    inline fun <reified T> write(key: String, value: T): NBTItemStack {
+    fun write(key: String, value: Any): NBTItemStack {
         val nmsItemStack = this.nmsItemStack
         val nbtTag = this.nbtTag
 
-        ("set${(value as Any)::class.java.simpleName}").let { methodName ->
+        ("set${value::class.java.simpleName}").let { methodName ->
             findMethodFromCache(methodName, NBT_TAG_COMPOUND.kotlin.functions.first { it.name == methodName }.javaMethod!!)
         }.invoke(nbtTag, key, value)
 
@@ -81,8 +82,6 @@ class NBTItemStack(itemStack: ItemStack) {
      * @return [ItemStack]
      */
     fun toItemStack() = itemStack
-
-    /* private */ fun findMethodFromCache(methodName: String, method: Method): Method = methodCacheMap.getOrPut(methodName, { method })
 
 }
 
