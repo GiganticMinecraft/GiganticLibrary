@@ -17,6 +17,6 @@ interface InventoryRecipe {
      * @param inputs a mapping of [ItemStack]s from [Int] representing a slot id.
      * @return result of the craft, `null` if the input is wrong or insufficient.
      */
-    fun yieldWith(inputs: Map<Int, ItemStack>): ItemStack?
+    fun yieldWith(inputs: Map<Int, ItemStack?>): ItemStack?
 
 }
