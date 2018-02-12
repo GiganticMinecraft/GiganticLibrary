@@ -3,6 +3,8 @@ package click.seichi.giganticlib.gui.session
 import click.seichi.giganticlib.gui.SlotLayout
 import click.seichi.giganticlib.gui.slot.ButtonSlot
 import click.seichi.giganticlib.gui.slot.StorageSlot
+import org.bukkit.entity.Player
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.inventory.Inventory
@@ -52,7 +54,11 @@ abstract class InventoryGUISession(initialLayout: SlotLayout): InventoryHolder {
      * @param slotId index of the slot
      * @return reaction bound to the slot
      */
-    fun getBoundReaction(slotId: Int) = layout[slotId].reaction
+    fun getBoundReaction(slotId: Int): (InventoryClickEvent) -> Unit = { event ->
+        layout[slotId].reaction(event)
+
+        (event.whoClicked as? Player)?.updateInventory()
+    }
 
     /**
      * Executes an action on inventory-open.
