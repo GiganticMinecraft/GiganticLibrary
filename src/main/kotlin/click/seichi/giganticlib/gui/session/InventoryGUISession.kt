@@ -55,7 +55,7 @@ abstract class InventoryGUISession(initialLayout: SlotLayout): InventoryHolder {
      * @return reaction bound to the slot
      */
     fun getBoundReaction(slotId: Int): (InventoryClickEvent) -> Unit = { event ->
-        layout[slotId].reaction(event)
+        layout[slotId]?.reaction?.invoke(event)
 
         (event.whoClicked as? Player)?.updateInventory()
     }

@@ -53,15 +53,11 @@ class SlotLayout(val inventoryParameter: InventoryParameter,
             (this.storageIndices == another.storageIndices)
 
     /**
-     * Returns a [Slot] which is set to the given index.
-     *
-     * If [slotId] exceeds the boundary described by [inventoryParameter],
-     * [IndexOutOfBoundsException] will be thrown.
+     * Returns a [Slot] which is set to the given index, or `null` if no such slot exists.
      *
      * @param slotId target slot id
      */
-    operator fun get(slotId: Int) = slotMapping[slotId] ?:
-            throw IndexOutOfBoundsException("Target slot number is out of range!")
+    operator fun get(slotId: Int) = slotMapping[slotId]
 
     override fun iterator() = slotMapping.iterator()
 }
