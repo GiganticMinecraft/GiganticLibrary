@@ -22,8 +22,11 @@ object InventoryGUIListener : Listener {
     private val InventoryEvent.guiSession
         get() = inventory?.holder as? InventoryGUISession
 
+    private val InventoryClickEvent.clickedGuiSession
+        get() = clickedInventory?.holder as? InventoryGUISession
+
     @EventHandler
-    fun onInventoryClick(event: InventoryClickEvent) = event.guiSession?.let { session ->
+    fun onInventoryClick(event: InventoryClickEvent) = event.clickedGuiSession?.let { session ->
         session.getBoundReaction(event.slot)(event)
     }
 
