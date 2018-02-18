@@ -13,7 +13,7 @@ import java.util.logging.Logger
         id = "giganticlibrary",
         name = "GiganticLibrary"
 )
-class Gigalopolis {
+class GiganticLibrary {
 
     @Inject
     private lateinit var logger: Logger
